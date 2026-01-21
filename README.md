@@ -7,14 +7,7 @@ $ podman build --no-cache -t registry.hyacinten.net/forgeos:latest .
 $ podman push registry.hyacinten.net/forgeos:latest
 ```
 
-To view changes from upstream:
-
-```
-$ skopeo inspect docker://quay.io/fedora/fedora-silverblue:43 | jq .Digest
-$ podman image inspect quay.io/fedora/fedora-silverblue:43 --format '{{.Digest}}'
-```
-
-To update the local image
+To update to the latest fedora image
 
 ```
 $ podman pull docker://quay.io/fedora/fedora-silverblue:43
