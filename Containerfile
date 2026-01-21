@@ -21,7 +21,7 @@ RUN rm /opt && mkdir -p /opt/brave.com && chmod 755 /opt/brave.com
 # 3. INSTALL ALL TOOLS & JAVA SOURCES
 # java-latest-openjdk (JDK 25+) is the standard for 2026.
 RUN dnf -y install \
-    brave-browser \
+    brave-browser fastfetch \
     zsh neovim luarocks gcc-c++ tree-sitter-cli \
     the_silver_searcher ripgrep yubikey-manager wakeonlan \
     java-latest-openjdk-devel java-latest-openjdk-src \
