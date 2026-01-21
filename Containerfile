@@ -23,7 +23,7 @@ RUN rm /opt && mkdir -p /opt/brave.com && chmod 755 /opt/brave.com
 RUN dnf -y install \
     brave-browser fastfetch tree jq \
     zsh neovim luarocks gcc-c++ tree-sitter-cli \
-    the_silver_searcher ripgrep yubikey-manager wakeonlan \
+    the_silver_searcher ripgrep yubikey-manager wol \
     java-latest-openjdk-devel java-latest-openjdk-src \
     python3 python3-pip \
     nodejs npm \
