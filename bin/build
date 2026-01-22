@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+podman build --no-cache -t registry.hyacinten.net/forgeos:latest . && podman push registry.hyacinten.net/forgeos:latest
