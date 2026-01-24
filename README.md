@@ -11,3 +11,8 @@ To update to the latest fedora image
 ```shell
 $ ./bin/update
 ```
+
+To see changes between image version:
+```shell
+$ rpm-ostree db diff --changelos
+```
