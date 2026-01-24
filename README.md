@@ -16,3 +16,18 @@ To see changes between image version:
 ```shell
 $ rpm-ostree db diff --changelos
 ```
+
+Registry
+
+```
+$ mkdir -p ~/.config/containers/systemd/
+$ cp -r registry/systemd/registry.container ~/.config/containers/systemd/
+$ sudo cp registry/registries.conf /etc/containers/registries.conf.d/local-registry.conf
+```
+
+Cleanup
+
+```
+$ podman system prune
+$ podman exec -it local-registry bin/registry garbage-collect /etc/docker/registry/config.yml
+```
