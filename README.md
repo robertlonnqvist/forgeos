@@ -14,12 +14,12 @@ $ ./bin/update
 
 To see changes between image version:
 ```shell
-$ rpm-ostree db diff --changelos
+$ rpm-ostree db diff --changelogs
 ```
 
 Registry
 
-```
+```shell
 $ mkdir -p ~/.config/containers/systemd/
 $ cp -r registry/systemd/registry.container ~/.config/containers/systemd/
 $ sudo cp registry/registries.conf /etc/containers/registries.conf.d/local-registry.conf
@@ -27,7 +27,7 @@ $ sudo cp registry/registries.conf /etc/containers/registries.conf.d/local-regis
 
 Cleanup
 
-```
+```shell
 $ podman system prune
 $ podman exec -it local-registry bin/registry garbage-collect /etc/docker/registry/config.yml
 ```
