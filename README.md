@@ -20,9 +20,16 @@ $ rpm-ostree db diff --changelogs
 Registry
 
 ```shell
+$ mkdir /var/home/robert/.registry-data
 $ mkdir -p ~/.config/containers/systemd/
 $ cp -r registry/systemd/registry.container ~/.config/containers/systemd/
 $ sudo cp registry/registries.conf /etc/containers/registries.conf.d/local-registry.conf
+$ systemctl --user daemon-reload
+```
+
+Use the new image
+```shell
+$ sudo bootc switch localhost:5000/forgeos:latest
 ```
 
 Cleanup
