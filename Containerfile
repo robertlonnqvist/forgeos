@@ -1,5 +1,5 @@
-# Use the official Fedora 43 Silverblue base
-FROM quay.io/fedora/fedora-silverblue:43
+# Use the official Fedora 44 Silverblue base
+FROM quay.io/fedora/fedora-silverblue:44
 
 # Add brave browser repo
 # Prepare /opt
