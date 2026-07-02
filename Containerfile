@@ -12,6 +12,7 @@ RUN printf "[brave-browser]\nname=Brave Browser\nbaseurl=https://brave-browser-r
         kernel \
         kernel-devel \
         brave-origin \
+        solaar \
         zsh \
         gcc \
         gcc-c++ \
