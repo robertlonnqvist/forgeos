@@ -46,9 +46,10 @@ jobs:
           registry: ${{ env.REGISTRY }}/${{ github.repository_owner }}
 
       - name: Prune Old Image Versions
-        uses: actions/delete-package-versions@v5
-        with:
-          package-name: ${{ env.IMAGE_NAME }}
-          package-type: 'container'
-          min-versions-to-keep: 2
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api /users/${{ github.repository_owner }}/packages/container/${{ env.IMAGE_NAME }}/versions \
+            --paginate -q '.[].id' | tail -n +3 | xargs -I {} \
+            gh api --method DELETE /users/${{ github.repository_owner }}/packages/container/${{ env.IMAGE_NAME }}/versions/{}
 
