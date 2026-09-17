@@ -25,6 +25,7 @@ $ mkdir -p ~/.config/containers/systemd/
 $ cp -r registry/systemd/registry.container ~/.config/containers/systemd/
 $ sudo cp registry/registries.conf /etc/containers/registries.conf.d/local-registry.conf
 $ systemctl --user daemon-reload
+$ systemctl start --user registry.service
 ```
 
 Use the new image

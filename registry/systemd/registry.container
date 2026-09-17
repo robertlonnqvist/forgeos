@@ -5,7 +5,7 @@ Description=Local Rootless Container Registry
 Image=docker.io/library/registry:2
 PublishPort=5000:5000
 ContainerName=local-registry
-Volume=%h/.registry-data:/var/lib/registry:Z
+Volume=%h/.local/share/registry-data:/var/lib/registry:Z
 
 [Install]
 WantedBy=default.target
