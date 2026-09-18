@@ -1,4 +1,4 @@
-name: Build Custom Silverblue Image
+name: Build ForgeOS
 on:
   schedule:
     - cron: '0 0 * * *'
