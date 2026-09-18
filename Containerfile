@@ -15,8 +15,6 @@ RUN rm -rf /opt && mkdir -p /opt/brave.com && \
         libxcrypt-compat \
         binutils \
         make \
-        libva \
-        libva-utils \
         intel-media-driver && \
     rm -f /etc/yum.repos.d/rpmfusion-*.repo && \
     dnf clean all
