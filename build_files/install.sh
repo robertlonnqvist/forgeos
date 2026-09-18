@@ -6,9 +6,13 @@ set -e
 rm -f /opt
 mkdir -p /opt/brave.com
 
-# Install rpm fusion for media drivers
-dnf -y install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-44.noarch.rpm \
-  https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-44.noarch.rpm
+# MATCH UBLUE: Disable the problematic history archive repo right away
+# This prevents dnf distro-sync from breaking on older Mesa references later.
+dnf config-manager disable updates-archive
+
+# Add Negativo17 Multimedia Repository and elevate priority
+dnf config-manager addrepo --from-repofile="https://negativo17.org/repos/fedora-multimedia.repo"
+dnf config-manager setopt fedora-multimedia.priority=90
 
 # Remove stuff we dont need (Some stuff taken from ublue/main)
 dnf -y remove \
@@ -30,12 +34,29 @@ dnf -y install \
     binutils \
     make
 
-# Intel graphics
-dnf -y install intel-media-driver
-# AMD graphics
-#dnf -y install mesa-va-drivers mesa-va-drivers-freeworld
-# Nvidia graphics
-#dnf -y --setopt=tsflags=noscripts install akmod-nvidia-open xorg-x11-drv-nvidia-cuda libva-nvidia-driver
+# =========================================================================
+# UNIVERSAL BLUE GRAPHICS SYNC ARRAY (For Intel & AMD)
+# =========================================================================
+# Swaps stock graphics with unlocked Negativo17 files seamlessly.
+# =========================================================================
+OVERRIDES=(
+    "intel-gmmlib"
+    "intel-mediasdk"
+    "intel-vpl-gpu-rt"
+    "libheif"
+    "libva"
+    "libva-intel-media-driver"
+    "mesa-dri-drivers"
+    "mesa-filesystem"
+    "mesa-libEGL"
+    "mesa-libGL"
+    "mesa-libgbm"
+    "mesa-va-drivers"
+    "mesa-vulkan-drivers"
+)
+
+dnf distro-sync --skip-unavailable -y --repo='fedora-multimedia' "${OVERRIDES[@]}"
+dnf versionlock add "${OVERRIDES[@]}"
 
 dnf clean all
 
