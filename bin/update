@@ -1,2 +1,0 @@
-#!/usr/bin/env bash
-podman pull docker://quay.io/fedora/fedora-silverblue:43
