@@ -19,8 +19,6 @@ dnf -y remove \
     firefox \
     firefox-langpacks \
     gnome-software \
-    google-noto-sans-cjk-vf-fonts \
-    default-fonts-cjk-sans \
     fedora-third-party
 
 # Install the things we need like brave and support for brew
