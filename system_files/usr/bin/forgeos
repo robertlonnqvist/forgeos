@@ -1,0 +1,91 @@
+#!/usr/bin/env bash
+
+if [[ ${EUID} -eq 0 ]]; then
+  echo "❌ Error: forgeos must not be run directly as root." >&2
+  echo "Please run it as a normal user. Necessary system tasks will ask for sudo." >&2
+  exit 1
+fi
+
+show_help() {
+  cat <<EOF
+Usage: forgeos <target> [options]
+
+Available targets:
+  update        Upgrade bootc system, Flatpaks, and Homebrew packages
+  clean-system  Prune Podman containers/images, clean bootc deployments,
+                remove unused Flatpaks, and run Homebrew cleanup
+
+Options:
+  -h, --help    Show this help message
+EOF
+}
+
+target_update() {
+  echo "🔄 Running forgeos update..."
+  echo ""
+
+  echo "📦 Checking for bootc system upgrades..."
+  sudo bootc upgrade
+  echo ""
+
+  echo "🚀 Updating Flatpak packages..."
+  flatpak update -y
+  echo ""
+
+  echo "🍺 Updating Homebrew formulae and casks..."
+  if command -v brew &>/dev/null; then
+    brew update && brew upgrade
+  else
+    echo "⚠️ Homebrew is not installed or not in PATH, skipping."
+  fi
+  echo ""
+
+  echo "✅ Update complete!"
+}
+
+target_clean-system() {
+  echo "🧹 Running forgeos clean-system..."
+  echo ""
+
+  echo "🐳 Pruning Podman resources (containers, build cache, dangling images)..."
+  # Cleans up unused container layers safely without removing active data volume mounts
+  podman system prune -f
+  echo ""
+
+  echo "📦 Cleaning up old bootc / ostree deployments..."
+  # bootc works on top of ostree; this prunes the previous staged versions/deployments
+  sudo ostree admin cleanup
+  echo ""
+
+  echo "🚀 Removing unused Flatpak runtimes..."
+  # Deletes any runtime extensions that are no longer requested by installed apps
+  flatpak uninstall --unused -y
+  echo ""
+
+  echo "🍺 Running Homebrew cleanup..."
+  if command -v brew &>/dev/null; then
+    # Prunes old versions, cache downloads, and stale lockfiles
+    brew cleanup --prune=all
+  else
+    echo "⚠️ Homebrew is not installed or not in PATH, skipping."
+  fi
+  echo ""
+
+  echo "✨ System cleanup complete!"
+}
+
+if [[ "$1" == "-h" || "$1" == "--help" || -z "$1" ]]; then
+  show_help
+  exit 0
+fi
+
+TARGET="${1}"
+shift
+
+if declare -f "target_${TARGET}" >/dev/null; then
+  "target_${TARGET}" "$@"
+else
+  echo "❌ Error: Unknown target '${TARGET}'"
+  echo "Run 'forgeos --help' to see available targets."
+  exit 1
+fi

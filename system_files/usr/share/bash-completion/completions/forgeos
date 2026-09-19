@@ -1,0 +1,30 @@
+# forgeos completion for Bash
+
+_forgeos_completions() {
+    local cur prev opts
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+    opts="-h --help"
+
+    if command -v forgeos &>/dev/null; then
+        local targets
+        targets=$(declare -F | awk '{print $3}' | grep '^target_' | sed 's/^target_//')
+        opts="$opts $targets"
+    else
+        opts="$opts update clean-system"
+    fi
+
+    if [[ ${cur} == -* ]] ; then
+        COMPREPLY=( $(compgen -W "-h --help" -- "${cur}") )
+        return 0
+    elif [[ " ${opts} " =~ " ${prev} " && ${prev} != -* ]]; then
+        return 0
+    else
+        COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
+        return 0
+    fi
+}
+
+complete -F _forgeos_completions forgeos
