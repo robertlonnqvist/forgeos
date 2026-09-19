@@ -1,6 +1,7 @@
 #compdef forgeos
 
 _forgeos() {
+    local state
     local -a targets
     local -a options
 
@@ -17,7 +18,7 @@ _forgeos() {
         targets=(update clean-system)
     fi
 
-    _arguments \
+    _arguments -C \
         '1: :->cmds' \
         '*:: :->args'
 
