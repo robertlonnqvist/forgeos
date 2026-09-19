@@ -47,6 +47,7 @@ if command -v shellcheck &>/dev/null; then
         "${REPO_ROOT}/system_files/usr/bin/forgeos" \
         "${REPO_ROOT}/build_files/install.sh" \
         "${REPO_ROOT}/tests/run_tests.sh" \
+        "${REPO_ROOT}/tests/run_tests_in_podman.sh" \
         "${REPO_ROOT}/tests/test_forgeos_cli.sh" \
         "${REPO_ROOT}/tests/test_bash_completion.sh"; then
         echo "✔ ShellCheck static analysis passed with zero warnings."

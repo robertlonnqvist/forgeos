@@ -8,7 +8,7 @@ _forgeos_completions() {
     # Cache targets globally on the first run so we don't read the disk on every TAB press
     if [[ -z "${_FORGEOS_CACHED_TARGETS+x}" ]]; then
         local cmd_path
-        cmd_path=$(type -P forgeos 2>/dev/null)
+        cmd_path=$(type -P forgeos 2>/dev/null || true)
         if [[ -n "$cmd_path" && -r "$cmd_path" ]]; then
             _FORGEOS_CACHED_TARGETS=$(sed -nE 's/^target_([a-zA-Z0-9_-]+)\(\).*/\1/p' "$cmd_path" | tr '\n' ' ')
         else
@@ -23,12 +23,12 @@ _forgeos_completions() {
 
     # If the user is typing a flag, only suggest flags
     if [[ ${cur} == -* ]]; then
-        mapfile -t COMPREPLY < <(compgen -W "-h --help" -- "${cur}")
+        mapfile -t COMPREPLY < <(compgen -W "-h --help" -- "${cur}" || true)
         return 0
     fi
 
     opts="-h --help ${_FORGEOS_CACHED_TARGETS}"
-    mapfile -t COMPREPLY < <(compgen -W "${opts}" -- "${cur}")
+    mapfile -t COMPREPLY < <(compgen -W "${opts}" -- "${cur}" || true)
 }
 
 complete -F _forgeos_completions forgeos

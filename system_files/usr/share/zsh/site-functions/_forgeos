@@ -10,7 +10,7 @@ _forgeos() {
     )
 
     # If forgeos exists and has new/custom targets defined, dynamically read them
-    cmd_path=$(whence -p forgeos 2>/dev/null)
+    cmd_path=$(whence -p forgeos 2>/dev/null || true)
     if [[ -n "$cmd_path" && -r "$cmd_path" ]]; then
         local -a dynamic_targets
         dynamic_targets=($(sed -nE 's/^target_([a-zA-Z0-9_-]+)\(\).*/\1/p' "$cmd_path"))
