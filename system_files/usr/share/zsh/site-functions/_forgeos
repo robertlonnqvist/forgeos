@@ -1,34 +1,39 @@
 #compdef forgeos
 
 _forgeos() {
-    local state
     local -a targets
-    local -a options
+    local cmd_path
 
-    options=(
-        '(-h --help)'{-h,--help}'[Show help message]'
+    targets=(
+        'update:Upgrade bootc system, Flatpaks, and Homebrew packages'
+        'clean-system:Prune Podman resources, clean bootc deployments, Flatpaks, Homebrew'
     )
 
-    # Find the forgeos executable path
-    local cmd_path=$(whence -p forgeos)
-    if [[ -n "$cmd_path" ]]; then
-        # Dynamically read target functions directly out of the file
-        targets=($(grep -E '^target_[a-zA-Z0-9_-]+\(\)' "$cmd_path" | sed -E 's/^target_([a-zA-Z0-9_-]+)\(\).*/\1/'))
-    else
-        targets=(update clean-system)
+    # If forgeos exists and has new/custom targets defined, dynamically read them
+    cmd_path=$(whence -p forgeos 2>/dev/null)
+    if [[ -n "$cmd_path" && -r "$cmd_path" ]]; then
+        local -a dynamic_targets
+        dynamic_targets=($(sed -nE 's/^target_([a-zA-Z0-9_-]+)\(\).*/\1/p' "$cmd_path"))
+
+        # Use dynamic targets if found, preserving any default descriptions
+        if (( ${#dynamic_targets[@]} > 0 )); then
+            local t
+            local -a custom_list
+            for t in "${dynamic_targets[@]}"; do
+                case "$t" in
+                    update) custom_list+=('update:Upgrade bootc system, Flatpaks, and Homebrew packages') ;;
+                    clean-system) custom_list+=('clean-system:Prune Podman resources, clean bootc deployments, Flatpaks, Homebrew') ;;
+                    *) custom_list+=("${t}:Custom target") ;;
+                esac
+            done
+            targets=("${custom_list[@]}")
+        fi
     fi
 
-    _arguments -C \
-        '1: :->cmds' \
+    _arguments -s -S \
+        '(-h --help)'{-h,--help}'[Show help message]' \
+        '1:target:_describe -t targets "forgeos target" targets' \
         '*:: :->args'
-
-    case $state in
-        cmds)
-            # Combine options and targets seamlessly
-            _arguments "$options[@]"
-            _describe -t commands 'forgeos targets' targets
-            ;;
-    esac
 }
 
 _forgeos "$@"

@@ -64,7 +64,7 @@ target_clean-system() {
 
   echo "🍺 Running Homebrew cleanup..."
   if command -v brew &>/dev/null; then
-    # Prunes old versions, cache downloads, and stale lockfiles
+    # Prunes old versions, cache downloads, and stale lock files
     brew cleanup --prune=all
   else
     echo "⚠️ Homebrew is not installed or not in PATH, skipping."

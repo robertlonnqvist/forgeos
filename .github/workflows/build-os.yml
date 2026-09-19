@@ -5,6 +5,9 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 env:
@@ -17,10 +20,15 @@ jobs:
     permissions:
       contents: read
       packages: write
+      security-events: write
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@v4
+
+      - name: Run Test Suites
+        run: |
+          ./tests/run_tests.sh
 
       - name: Set up Buildah or Podman via Build Image Action
         uses: redhat-actions/buildah-build@v3
@@ -32,6 +40,7 @@ jobs:
             ./Containerfile
 
       - name: Log in to GitHub Container Registry
+        if: github.event_name != 'pull_request'
         uses: redhat-actions/podman-login@v2
         with:
           registry: ${{ env.REGISTRY }}
@@ -39,6 +48,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Push Image to GHCR
+        if: github.event_name != 'pull_request'
         uses: redhat-actions/push-to-registry@v3
         with:
           image: ${{ steps.build-image.outputs.image }}
@@ -46,6 +56,7 @@ jobs:
           registry: ${{ env.REGISTRY }}/${{ github.repository_owner }}
 
       - name: Prune Old Image Versions
+        if: github.event_name != 'pull_request'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |

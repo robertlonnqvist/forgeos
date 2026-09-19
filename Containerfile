@@ -1,7 +1,13 @@
-FROM quay.io/fedora/fedora-silverblue:44
+ARG FEDORA_VERSION=44
+FROM quay.io/fedora/fedora-silverblue:${FEDORA_VERSION}
+
+ARG FEDORA_VERSION
+LABEL org.opencontainers.image.title="forgeos" \
+      org.opencontainers.image.description="Custom Fedora Silverblue / bootc image" \
+      org.opencontainers.image.source="https://github.com/robertlonnqvist/forgeos"
 
 COPY system_files/ /
-COPY build_files/install.sh /tmp/install.sh
-RUN /tmp/install.sh && rm /tmp/install.sh
+COPY build_files/install.sh /install.sh
+RUN /install.sh && rm -f /install.sh
 
 RUN bootc container lint

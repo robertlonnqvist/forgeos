@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+vendor/
+
+# Environment variables & secrets
+.env
+.env.local
+*.pem
+
+# Build outputs & compiled code
+dist/
+build/
+*.out
+
+# Logs
+logs/
+*.log
+
+# Operating system junk
+.DS_Store
+Thumbs.db
+
+# IDE and editor settings
+.idea/
+.vscode/
+*.swp
