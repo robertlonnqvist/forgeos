@@ -39,17 +39,20 @@ are managed strictly via Git.
 ### Making Changes to Your OS
 
 1. Modify the `Containerfile` or drop configuration files into `system_files/` (e.g., adding keys to `/etc`).
-2. Verify your changes and build locally
+2. Test your changes locally in the sandbox environment (see [Local Testing & Sandbox Environment](#-local-testing--sandbox-environment)).
+3. Verify your production OS image build:
    ```bash
-   podman build -t forgeos:local .
+   podman build -t forgeos:local -f Containerfile .
    ```
-3. Commit and push your changes to GitHub:
+4. Commit and push your changes to GitHub:
    ```bash
    git add .
    git commit -m "chore: optimize configuration and layer packages"
    git push origin main
    ```
-4. GitHub Actions will automatically validate (`bootc container lint`), build, and publish your new image layer.
+5. GitHub Actions will automatically validate (`bootc container lint`), build, and publish your new image layer.
+
+---
 
 ### Pulling System Updates
 
