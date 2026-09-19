@@ -1,16 +1,17 @@
 # forgeos completion for Bash
 
 _forgeos_completions() {
-    local cur prev opts
+    local cur prev opts cmd_path targets
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
 
     opts="-h --help"
+    cmd_path=$(type -P forgeos)
 
-    if command -v forgeos &>/dev/null; then
-        local targets
-        targets=$(declare -F | awk '{print $3}' | grep '^target_' | sed 's/^target_//')
+    if [[ -n "$cmd_path" ]]; then
+        # Dynamically read target functions directly out of the source file
+        targets=$(grep -E '^target_[a-zA-Z0-9_-]+\(\)' "$cmd_path" | sed -E 's/^target_([a-zA-Z0-9_-]+)\(\).*/\1/')
         opts="$opts $targets"
     else
         opts="$opts update clean-system"
@@ -20,6 +21,7 @@ _forgeos_completions() {
         COMPREPLY=( $(compgen -W "-h --help" -- "${cur}") )
         return 0
     elif [[ " ${opts} " =~ " ${prev} " && ${prev} != -* ]]; then
+        # Stops suggesting after a valid target has already been chosen
         return 0
     else
         COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )

@@ -8,8 +8,11 @@ _forgeos() {
         '(-h --help)'{-h,--help}'[Show help message]'
     )
 
-    if command -v forgeos &>/dev/null; then
-        targets=($(whence -f | grep '^target_' | sed 's/^target_//'))
+    # Find the forgeos executable path
+    local cmd_path=$(whence -p forgeos)
+    if [[ -n "$cmd_path" ]]; then
+        # Dynamically read target functions directly out of the file
+        targets=($(grep -E '^target_[a-zA-Z0-9_-]+\(\)' "$cmd_path" | sed -E 's/^target_([a-zA-Z0-9_-]+)\(\).*/\1/'))
     else
         targets=(update clean-system)
     fi
@@ -20,9 +23,10 @@ _forgeos() {
 
     case $state in
         cmds)
+            # Combine options and targets seamlessly
             _arguments "$options[@]"
-            _values 'targets' "$targets[@]"
-        ;;
+            _describe -t commands 'forgeos targets' targets
+            ;;
     esac
 }
 
