@@ -2,8 +2,6 @@
 
 set -euxo pipefail
 
-FEDORA_MAJOR="$(rpm -E %fedora)"
-
 # Fix for brave to install cleanly
 rm -f /opt
 mkdir -p /opt/brave.com
@@ -11,19 +9,38 @@ mkdir -p /opt/brave.com
 # Install brave repo
 curl -fsSL https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo -o /etc/yum.repos.d/brave-browser.repo
 
-# Install rpm fusion for media drivers
-dnf -y install "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-${FEDORA_MAJOR}.noarch.rpm" \
-  "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-${FEDORA_MAJOR}.noarch.rpm"
+dnf5 config-manager addrepo --from-repofile="https://negativo17.org/repos/fedora-multimedia.repo"
+dnf5 config-manager setopt fedora-multimedia.priority=90
+
+# See https://github.com/ublue-os/main/blob/main/build_files/install.sh
+OVERRIDES=(
+  "intel-gmmlib"
+  "intel-mediasdk"
+  "intel-vpl-gpu-rt"
+  "libheif"
+  "libva"
+  "libva-intel-media-driver"
+  "mesa-dri-drivers"
+  "mesa-filesystem"
+  "mesa-libEGL"
+  "mesa-libGL"
+  "mesa-libgbm"
+  "mesa-va-drivers"
+  "mesa-vulkan-drivers"
+)
+
+dnf5 distro-sync --skip-unavailable -y --repo='fedora-multimedia' "${OVERRIDES[@]}"
+dnf5 versionlock add "${OVERRIDES[@]}"
 
 # Remove stuff we dont need
-dnf -y remove \
+dnf5 -y remove \
   firefox \
   firefox-langpacks \
   gnome-software \
   fedora-third-party
 
 # Install the things we need like brave and support for brew
-dnf -y install \
+dnf5 -y install \
   brave-origin \
   zsh \
   gcc \
@@ -34,10 +51,9 @@ dnf -y install \
   make \
   intel-media-driver
 
-dnf remove -y rpmfusion-free-release rpmfusion-nonfree-release
 rm -f /etc/yum.repos.d/brave-browser.repo
 
-dnf clean all
+dnf5 clean all
 rm -rf \
   /run/dnf \
   /var/cache/* \
