@@ -1,0 +1,1 @@
+docker: ghcr.io/robertlonnqvist/forgeos: use-sigstore-attachments: true

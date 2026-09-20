@@ -51,12 +51,25 @@ jobs:
           tags: ${{ steps.build-image.outputs.tags }}
           registry: ${{ env.REGISTRY }}/${{ github.repository_owner }}
 
+      - name: Install Cosign
+        if: github.event_name != 'pull_request'
+        uses: sigstore/cosign-installer@v3.8.1
+
+      - name: Sign Container Image
+        if: github.event_name != 'pull_request'
+        run: |
+          cosign sign --key env://COSIGN_PRIVATE_KEY ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:latest
+        env:
+          COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
+          COSIGN_PASSWORD: "" 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Prune Old Image Versions
         if: github.event_name != 'pull_request'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh api /users/${{ github.repository_owner }}/packages/container/${{ env.IMAGE_NAME }}/versions \
-            --paginate -q '.[].id' | tail -n +3 | xargs -I {} \
+          # Safely filters out Cosign signature (.sig) and attestation (.att) files before calculating the deletion line
+          gh api /users/${{ github.repository_owner }}/packages/container/${{ env.IMAGE_NAME }}/versions --paginate \
+            --template '{{range .}}{{if not (or (endWith .metadata.container.tags ".sig") (endWith .metadata.container.tags ".att"))}}{{.id}}{{"\n"}}{{end}}{{end}}' | tail -n +3 | xargs -I {} \
             gh api --method DELETE /users/${{ github.repository_owner }}/packages/container/${{ env.IMAGE_NAME }}/versions/{}
-

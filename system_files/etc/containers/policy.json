@@ -1,0 +1,14 @@
+{
+    "default": [{ "type": "insecureAcceptAnything" }],
+    "transports": {
+        "docker": {
+            "ghcr.io/robertlonnqvist/forgeos": [
+                {
+                    "type": "sigstoreSigned",
+                    "keyPath": "/etc/pki/containers/forgeos.pub",
+                    "signedIdentity": { "type": "matchRepository" }
+                }
+            ]
+        }
+    }
+}
