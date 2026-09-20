@@ -48,8 +48,7 @@ dnf5 -y install \
   glibc-devel \
   libxcrypt-compat \
   binutils \
-  make \
-  intel-media-driver
+  make
 
 rm -f /etc/yum.repos.d/brave-browser.repo
 
