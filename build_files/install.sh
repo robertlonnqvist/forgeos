@@ -7,8 +7,7 @@ rm -f /opt
 mkdir -p /opt/brave.com
 
 # Install brave repo
-curl -fsSL https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo -o /etc/yum.repos.d/brave-browser.repo
-
+dnf5 config-manager addrepo --from-repofile="https://brave-browser-rpm-release.s3.brave.com/brave-browser.repo"
 dnf5 config-manager addrepo --from-repofile="https://negativo17.org/repos/fedora-multimedia.repo"
 dnf5 config-manager setopt fedora-multimedia.priority=90
 
@@ -29,7 +28,7 @@ OVERRIDES=(
   "mesa-vulkan-drivers"
 )
 
-dnf5 distro-sync --skip-unavailable -y --repo='fedora-multimedia' "${OVERRIDES[@]}"
+dnf5 distro-sync --skip-unavailable -y --repo="fedora-multimedia" "${OVERRIDES[@]}"
 dnf5 versionlock add "${OVERRIDES[@]}"
 
 # Remove stuff we dont need

@@ -4,6 +4,8 @@ A custom, immutable workstation image built on **Fedora Silverblue** using `boot
 and extended with user-space Homebrew. This image is optimized for Intel based machines but its quite simple to adopt
 for Nvidia or AMD. [RPM Fusion](https://rpmfusion.org/) is already included.
 
+Credits to [Universal Blue](https://github.com/ublue-os) for ideas and inspiration.
+
 ---
 
 ## 🚀 First-Time Setup & Installation
