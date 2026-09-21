@@ -6,7 +6,7 @@ _forgeos() {
 
     local -a targets
     targets=(
-        'update:Upgrade bootc system, Flatpaks, and Homebrew packages'
+        'update:Upgrade bootc system, Flatpaks, Homebrew packages, and Distroboxes'
         'cleanup:Prune Podman resources, clean bootc deployments, Flatpaks, Homebrew'
     )
 

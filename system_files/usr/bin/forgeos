@@ -11,7 +11,7 @@ show_help() {
 Usage: forgeos <target> [options]
 
 Available targets:
-  update        Upgrade bootc system, Flatpaks, and Homebrew packages
+  update        Upgrade bootc system, Flatpaks, Homebrew packages, and Distroboxes
   cleanup       Prune Podman containers/images, clean bootc deployments,
                 remove unused Flatpaks, and run Homebrew cleanup
 
@@ -40,6 +40,16 @@ target_update() {
   fi
   echo ""
 
+  echo "📦 Upgrading all Distrobox containers..."
+  if command -v distrobox &>/dev/null; then
+    for box in $(podman ps -a --filter "label=manager=distrobox" --format "{{.Names}}"); do
+      distrobox upgrade "$box"
+    done
+  else
+    echo "⚠️ Distrobox is not installed or not in PATH, skipping."
+  fi
+  echo ""
+
   echo "✅ Update complete!"
 }
 
@@ -48,23 +58,19 @@ target_cleanup() {
   echo ""
 
   echo "🐳 Pruning Podman resources (containers, build cache, dangling images)..."
-  # Cleans up unused container layers safely without removing active data volume mounts
   podman system prune -f
   echo ""
 
   echo "📦 Cleaning up old bootc / ostree deployments..."
-  # bootc works on top of ostree; this prunes the previous staged versions/deployments
   sudo ostree admin cleanup
   echo ""
 
   echo "🚀 Removing unused Flatpak runtimes..."
-  # Deletes any runtime extensions that are no longer requested by installed apps
   flatpak uninstall --unused -y
   echo ""
 
   echo "🍺 Running Homebrew cleanup..."
   if command -v brew &>/dev/null; then
-    # Prunes old versions, cache downloads, and stale lock files
     brew cleanup --prune=all
   else
     echo "⚠️ Homebrew is not installed or not in PATH, skipping."
