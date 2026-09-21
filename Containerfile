@@ -1,5 +1,5 @@
 ARG FEDORA_VERSION=44
-FROM quay.io/fedora/fedora-silverblue:${FEDORA_VERSION}
+FROM ghcr.io/ublue-os/silverblue-main:${FEDORA_VERSION}
 
 ARG FEDORA_VERSION
 LABEL org.opencontainers.image.title="forgeos" \
