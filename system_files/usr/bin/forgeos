@@ -42,6 +42,8 @@ target_update() {
 
   echo "📦 Upgrading all Distrobox containers..."
   if command -v distrobox &>/dev/null; then
+    # Temporary fix for https://github.com/89luca89/distrobox/issues/2084
+    # Is fixed in in distrobox 2
     for box in $(podman ps -a --filter "label=manager=distrobox" --format "{{.Names}}"); do
       distrobox upgrade "$box"
     done
