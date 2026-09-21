@@ -12,7 +12,7 @@ Usage: forgeos <target> [options]
 
 Available targets:
   update        Upgrade bootc system, Flatpaks, and Homebrew packages
-  clean-system  Prune Podman containers/images, clean bootc deployments,
+  cleanup       Prune Podman containers/images, clean bootc deployments,
                 remove unused Flatpaks, and run Homebrew cleanup
 
 Options:
@@ -43,8 +43,8 @@ target_update() {
   echo "✅ Update complete!"
 }
 
-target_clean-system() {
-  echo "🧹 Running forgeos clean-system..."
+target_cleanup() {
+  echo "🧹 Running forgeos cleanup..."
   echo ""
 
   echo "🐳 Pruning Podman resources (containers, build cache, dangling images)..."
@@ -71,7 +71,7 @@ target_clean-system() {
   fi
   echo ""
 
-  echo "✨ System cleanup complete!"
+  echo "✨ Cleanup complete!"
 }
 
 if [[ "$1" == "-h" || "$1" == "--help" || -z "$1" ]]; then

@@ -7,7 +7,7 @@ _forgeos_completions() {
 
     # Cache targets globally on the first run so we don't read the disk on every TAB press
     if [[ -z "${_FORGEOS_CACHED_TARGETS+x}" ]]; then
-        _FORGEOS_CACHED_TARGETS="update clean-system"
+        _FORGEOS_CACHED_TARGETS="update cleanup"
         cmd_path=$(type -P forgeos 2>/dev/null || true)
         if [[ -r "$cmd_path" ]]; then
             targets=$(sed -nE 's/^target_([a-zA-Z0-9_-]+)\(\).*/\1/p' "$cmd_path" | awk '!seen[$0]++')

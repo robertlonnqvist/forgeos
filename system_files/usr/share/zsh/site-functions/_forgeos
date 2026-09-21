@@ -7,7 +7,7 @@ _forgeos() {
     local -a targets
     targets=(
         'update:Upgrade bootc system, Flatpaks, and Homebrew packages'
-        'clean-system:Prune Podman resources, clean bootc deployments, Flatpaks, Homebrew'
+        'cleanup:Prune Podman resources, clean bootc deployments, Flatpaks, Homebrew'
     )
 
     # `_describe` cannot be used directly as an `_arguments` action: `_arguments`
