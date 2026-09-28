@@ -12,9 +12,6 @@ dnf5 -y remove \
 # Install the things we need
 dnf5 -y install \
   zsh \
-  neovim \
-  fastfetch \
-  btop \
   gcc \
   gcc-c++ \
   glibc-devel \
