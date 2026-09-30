@@ -1,6 +1,6 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
-set -euxo pipefail
+set -eu
 
 # Remove stuff we dont need
 dnf5 -y remove \
