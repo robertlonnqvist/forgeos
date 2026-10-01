@@ -17,7 +17,9 @@ dnf5 -y install \
   glibc-devel \
   libxcrypt-compat \
   binutils \
-  make
+  make \
+  pkg-config \
+  openssl-devel
 
 dnf5 clean all
 rm -rf \
