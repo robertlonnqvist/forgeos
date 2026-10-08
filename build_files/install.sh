@@ -9,18 +9,6 @@ dnf5 -y remove \
   gnome-software \
   fedora-third-party
 
-# Install the things we need
-dnf5 -y install \
-  zsh \
-  gcc \
-  gcc-c++ \
-  glibc-devel \
-  libxcrypt-compat \
-  binutils \
-  make \
-  pkg-config \
-  openssl-devel
-
 dnf5 clean all
 rm -rf \
   /run/dnf \
