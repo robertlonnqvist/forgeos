@@ -20,7 +20,7 @@ dnf5 -y install \
   make \
   pkg-config \
   openssl-devel \
-  openssl-v3-compat
+  openssl3-libs
 
 dnf5 clean all
 rm -rf \
