@@ -27,6 +27,7 @@ rm -rf \
   /run/dnf \
   /var/cache/* \
   /var/lib/dnf \
+  /var/lib/dnf5 \
   /var/log/* \
   /var/tmp/* \
   /tmp/*
