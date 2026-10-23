@@ -31,6 +31,12 @@ installation script will succeed smoothly.
 
 Follow the official installation guide at [brew.sh](https://brew.sh)
 
+Add LUKS discard support
+
+```bash
+rpm-ostree kargs --append="rd.luks.options=discard"
+```
+
 ---
 
 ## 🛠️ Development & Update Workflow
@@ -79,4 +85,3 @@ local database diff log:
 ```bash
 rpm-ostree db diff --changelogs
 ```
-
